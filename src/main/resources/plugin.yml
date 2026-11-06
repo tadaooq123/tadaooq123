@@ -1,0 +1,21 @@
+name: BlindDeafMute
+version: '${version}'
+main: com.github.tadaooq123.bdm.BdmPlugin
+api-version: '1.21'
+softdepend: [voicechat]
+description: "Слепой, глухой, немой — кооперативное выживание со сменой ролей."
+authors: [tadaooq123]
+
+commands:
+  bdm:
+    description: "Слепой, глухой, немой — управление игрой"
+    usage: "/bdm help"
+    aliases: [sgn]
+
+permissions:
+  bdm.admin:
+    description: "Запуск, остановка и настройка игры"
+    default: op
+  bdm.bypass:
+    description: "Ограничения ролей не действуют (для ведущего)"
+    default: false

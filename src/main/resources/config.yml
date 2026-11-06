@@ -1,0 +1,108 @@
+# ==============================================================
+#   Слепой, Глухой, Немой — настройки
+# ==============================================================
+
+# Как часто меняются роли (в минутах)
+swap-interval-minutes: 10
+
+# ROTATE — роли сдвигаются по кругу: слепой → глухой → немой → слепой
+# RANDOM — случайная раздача, но каждый игрок получает НОВУЮ роль
+swap-mode: ROTATE
+
+# За сколько секунд до смены показывать обратный отсчёт
+swap-warning-seconds: 10
+
+# Общие жизни команды. Когда кончаются — поражение. 0 = бесконечно
+team-lives: 5
+
+# Игроки, зашедшие во время игры, получают самую редкую роль
+late-join: true
+
+start:
+  countdown-seconds: 5
+  heal: true
+  clear-inventory: false
+
+chat:
+  # OFF   — обычный чат запрещён всем участникам (классика челленджа)
+  # ROLES — немой не может писать, слепой не видит чужие сообщения
+  mode: OFF
+  # Команды, через которые можно было бы «поговорить»
+  blocked-commands: [msg, tell, w, me, say, teammsg, tm, whisper, r, reply, m]
+
+voice-chat:
+  # Интеграция с Simple Voice Chat: немой не говорит, глухой не слышит
+  enabled: true
+
+blind:
+  # Дополнительно эффект «Тьма» — экран пульсирует, становится страшнее
+  darkness-pulse: true
+  # Ближайший враждебный моб издаёт звук «эхолокации», вблизи стучит сердце
+  echolocation: true
+  echolocation-radius: 16
+  # Шипение рядом с лавой
+  lava-warning: true
+  # Может ли слепой подписывать таблички и книги
+  can-write: false
+  ability-cooldown-seconds: 5
+
+deaf:
+  # Глушить звуки игры (через ресурспак, а если он не загрузился — принудительно)
+  mute-game-sounds: true
+  resource-pack:
+    enabled: true
+    # Порт встроенного веб-сервера, с которого игроки скачают «тихий» пак.
+    # Его нужно открыть на хостинге/роутере (TCP).
+    port: 8765
+    # Адрес сервера для ссылки на пак. Пусто — используется адрес,
+    # по которому игрок зашёл на сервер.
+    public-host: ""
+  # Внизу экрана стрелка к ближайшему врагу
+  danger-compass: true
+  danger-radius: 14
+  ability-cooldown-seconds: 20
+  glow-seconds: 5
+
+mute:
+  # Может ли немой подписывать таблички и книги
+  can-write: false
+  gesture-cooldown-seconds: 1.5
+  # Дальность, на которой глухие видят подсказку «кто-то машет»
+  gesture-radius: 32
+
+tasks:
+  # Каждый раунд (между сменами ролей) команда получает задание
+  enabled: true
+  # Награда за выполнение: +1 жизнь команде
+  reward-life: true
+  # И предметы каждому участнику (МАТЕРИАЛ:количество)
+  reward-items: ["GOLDEN_APPLE:1", "COOKED_BEEF:4"]
+  # Не успели — проклятие (случайный дебафф всем)
+  fail-curse: true
+  curse-seconds: 90
+  # type: ITEM — суммарно в инвентарях команды; KILL — убить мобов; WORLD — попасть в мир (NETHER / THE_END)
+  # from-round — с какого раунда задание может выпасть (сложные — попозже)
+  list:
+    - {type: ITEM, target: OAK_LOG, amount: 32, name: "Нарубить 32 дубовых бревна"}
+    - {type: ITEM, target: COBBLESTONE, amount: 64, name: "Накопать стак булыжника"}
+    - {type: ITEM, target: COAL, amount: 16, name: "Добыть 16 угля"}
+    - {type: ITEM, target: IRON_INGOT, amount: 12, name: "Выплавить 12 железных слитков", from-round: 2}
+    - {type: ITEM, target: BREAD, amount: 8, name: "Испечь 8 хлеба"}
+    - {type: ITEM, target: COOKED_BEEF, amount: 10, name: "Приготовить 10 стейков"}
+    - {type: ITEM, target: WHITE_BED, amount: 1, name: "Сделать белую кровать"}
+    - {type: ITEM, target: SHIELD, amount: 3, name: "Сделать 3 щита", from-round: 2}
+    - {type: ITEM, target: BUCKET, amount: 2, name: "Сделать 2 ведра", from-round: 2}
+    - {type: ITEM, target: GOLD_INGOT, amount: 6, name: "Добыть 6 золотых слитков", from-round: 2}
+    - {type: ITEM, target: DIAMOND, amount: 3, name: "Найти 3 алмаза", from-round: 3}
+    - {type: ITEM, target: OBSIDIAN, amount: 10, name: "Добыть 10 обсидиана", from-round: 4}
+    - {type: ITEM, target: BLAZE_ROD, amount: 5, name: "Добыть 5 стержней ифрита", from-round: 5}
+    - {type: ITEM, target: ENDER_PEARL, amount: 8, name: "Собрать 8 жемчугов Края", from-round: 4}
+    - {type: ITEM, target: ENDER_EYE, amount: 10, name: "Скрафтить 10 очей Края", from-round: 6}
+    - {type: KILL, target: ZOMBIE, amount: 6, name: "Убить 6 зомби"}
+    - {type: KILL, target: SKELETON, amount: 4, name: "Убить 4 скелета"}
+    - {type: KILL, target: SPIDER, amount: 4, name: "Убить 4 пауков"}
+    - {type: KILL, target: CREEPER, amount: 2, name: "Убить 2 криперов"}
+    - {type: KILL, target: ENDERMAN, amount: 2, name: "Убить 2 эндерменов", from-round: 3}
+    - {type: KILL, target: COW, amount: 5, name: "Добыть мясо: убить 5 коров"}
+    - {type: WORLD, target: NETHER, amount: 1, name: "Попасть в Незер", from-round: 3}
+    - {type: WORLD, target: THE_END, amount: 1, name: "Попасть в Край", from-round: 7}
