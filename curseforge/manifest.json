@@ -1,0 +1,29 @@
+{
+  "minecraft": {
+    "version": "1.21.1",
+    "modLoaders": [
+      {
+        "id": "fabric-0.16.14",
+        "primary": true
+      }
+    ]
+  },
+  "manifestType": "minecraftModpack",
+  "manifestVersion": 1,
+  "name": "Слепой, Глухой, Немой",
+  "version": "1.0.0",
+  "author": "tadaooq123",
+  "files": [
+    {
+      "projectID": 306612,
+      "fileID": 8786256,
+      "required": true
+    },
+    {
+      "projectID": 416089,
+      "fileID": 9350479,
+      "required": true
+    }
+  ],
+  "overrides": "overrides"
+}
