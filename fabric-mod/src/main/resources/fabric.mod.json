@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "blinddeafmute",
+  "version": "${version}",
+  "name": "Слепой, Глухой, Немой",
+  "description": "Кооперативное выживание: слепой, глухой и немой должны убить дракона. Роли меняются по таймеру. Работает с Simple Voice Chat.",
+  "authors": ["tadaooq123"],
+  "contact": {
+    "sources": "https://github.com/tadaooq123/tadaooq123"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.github.tadaooq123.bdm.BdmMod"],
+    "client": ["com.github.tadaooq123.bdm.client.BdmClient"],
+    "voicechat": ["com.github.tadaooq123.bdm.VoiceChatBridge"]
+  },
+  "mixins": [
+    "blinddeafmute.mixins.json",
+    {
+      "config": "blinddeafmute.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "voicechat": "*"
+  }
+}
