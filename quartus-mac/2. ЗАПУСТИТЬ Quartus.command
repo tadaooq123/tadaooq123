@@ -9,7 +9,7 @@ URL="http://localhost:$PORT/vnc.html?autoconnect=1&resize=remote&reconnect=1"
 
 need_docker
 need_image
-mkdir -p "$PROJECTS_DIR"
+mkdir -p "$PROJECTS_DIR" "$LICENSE_DIR"
 
 if [ "$(docker inspect -f '{{.State.Running}}' "$CONTAINER" 2>/dev/null)" = "true" ]; then
     echo "Quartus уже запущен — открываю в браузере."
@@ -20,9 +20,11 @@ docker rm -f "$CONTAINER" >/dev/null 2>&1
 
 echo "Запускаю Quartus..."
 docker run -d --rm --name "$CONTAINER" --platform linux/amd64 \
+    --mac-address "$(questa_mac)" \
     -p "127.0.0.1:$PORT:6080" \
     -v "$PROJECTS_DIR":/projects \
     -v "$HOME_VOLUME":/root \
+    -v "$LICENSE_DIR":/license:ro \
     -e GEOMETRY="${GEOMETRY:-1600x1000}" \
     "$IMAGE" >/dev/null || die "не удалось запустить Quartus"
 

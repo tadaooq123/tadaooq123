@@ -14,6 +14,9 @@ PORT=6080
 # Семейства ПЛИС: cyclone (Cyclone IV), cyclonev (Cyclone V), max (MAX II/V),
 # max10 (MAX 10), cyclone10lp, arria_lite. Можно переопределить: DEVICES="max10" ...
 DEVICES="${DEVICES:-cyclone cyclonev max max10}"
+# Симулятор Questa (временные диаграммы): 1 — ставить, 0 — нет.
+WITH_QUESTA="${WITH_QUESTA:-1}"
+LICENSE_DIR="$DATA_DIR/license"    # лицензия Questa; внутри Quartus это /license
 
 # Docker Desktop, OrbStack и Homebrew ставят программы сюда; в .command их может не быть в PATH.
 export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.docker/bin:$HOME/.orbstack/bin"
@@ -22,6 +25,7 @@ export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.docker/bin:$HOME/.orb
 sha_for() {
     case "$1" in
         QuartusLiteSetup-*) echo 518433ec7dcd61725560af653353f7a5c320cce9e528b22747b8a8df3674c4eb ;;
+        QuestaSetup-*)      echo d05ee9b04fa34e2982a32f94549460c4d0ba18455d63f3c9bb8f617fe0fb4f75 ;;
         arria_lite-*)       echo 129c6fbb5cfb678bd0580488604240cb93fb31e79ed75e19355200667993107f ;;
         cyclone10lp-*)      echo 96ead29610ae13a8b650b28d16f95636d93aaea76f5704440bad3b1db3121f62 ;;
         cyclonev-*)         echo d6e484fd1b0a47785bc8bcd318e427d4c9798f9276e9ef92985235865f6bcb6f ;;
@@ -66,6 +70,20 @@ need_docker() {
         docker info >/dev/null 2>&1 || die "Docker не запустился. Открой приложение Docker вручную и попробуй снова."
     fi
 }
+
+# Лицензия Questa привязана к MAC-адресу сетевой карты, поэтому у контейнера
+# постоянный адрес. Он создаётся один раз и хранится в $DATA_DIR/mac.
+questa_mac() {
+    mkdir -p "$DATA_DIR"
+    if [ ! -s "$DATA_DIR/mac" ]; then
+        printf '02:%02x:%02x:%02x:%02x:%02x\n' $((RANDOM % 256)) $((RANDOM % 256)) \
+            $((RANDOM % 256)) $((RANDOM % 256)) $((RANDOM % 256)) > "$DATA_DIR/mac"
+    fi
+    cat "$DATA_DIR/mac"
+}
+
+# NIC ID для сайта лицензий Altera: тот же MAC без двоеточий.
+questa_nic_id() { questa_mac | tr -d ':'; }
 
 image_exists() { docker image inspect "$IMAGE" >/dev/null 2>&1; }
 

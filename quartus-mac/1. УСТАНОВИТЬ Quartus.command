@@ -9,7 +9,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 echo "=============================================="
 echo "   Quartus Prime Lite для Mac — установка"
 echo "=============================================="
-echo "Займёт 30–90 минут, большая часть — скачивание (~6 ГБ)."
+echo "Займёт 40–120 минут, большая часть — скачивание (~8 ГБ)."
 echo "Не закрывай это окно и держи Mac на зарядке."
 
 # 1. Процессор и Rosetta
@@ -35,17 +35,19 @@ if [ "$(uname -m)" = "arm64" ]; then
 fi
 
 free_gb=$(df -Pk "$HOME" | awk 'NR==2 {print int($4 / 1048576)}')
-if [ "${free_gb:-0}" -lt 40 ]; then
-    echo "   Свободно на диске: ${free_gb} ГБ, а нужно примерно 40 ГБ."
+if [ "${free_gb:-0}" -lt 50 ]; then
+    echo "   Свободно на диске: ${free_gb} ГБ, а нужно примерно 50 ГБ."
     read -r -p "   Всё равно продолжить? (y/n) " ans
     [ "$ans" = "y" ] || die "освободи место на диске и запусти установку снова"
 fi
 
 # 3. Скачивание
 step "[3/5] Скачиваю Quartus $QUARTUS_VER (семейства: $DEVICES)..."
+[ "$WITH_QUESTA" = 1 ] && echo "   + симулятор Questa для временных диаграмм"
 mkdir -p "$DL_DIR" "$PROJECTS_DIR"
 
 files="QuartusLiteSetup-$QUARTUS_VER-linux.run"
+[ "$WITH_QUESTA" = 1 ] && files="$files QuestaSetup-$QUARTUS_VER-linux.run"
 for d in $DEVICES; do
     [ -n "$(sha_for "$d-")" ] || die "неизвестное семейство ПЛИС: $d"
     files="$files $d-$QUARTUS_VER.qdz"
@@ -96,8 +98,9 @@ docker build --platform linux/amd64 \
     --build-context dl="$DL_DIR" \
     --build-arg QUARTUS_VER="$QUARTUS_VER" \
     --build-arg DEVICES="$DEVICES" \
+    --build-arg WITH_QUESTA="$WITH_QUESTA" \
     -t "$IMAGE" "$HERE/docker" || die "установка Quartus не удалась (подробности выше)"
-# Docker кэширует копию установщиков (~6 ГБ) — она больше не нужна.
+# Docker кэширует копию установщиков (~8 ГБ) — она больше не нужна.
 docker builder prune -f --filter type=source.local >/dev/null 2>&1 || true
 
 # 5. Прошивка для USB-Blaster II (нужна некоторым платам, например DE1-SoC)
@@ -111,6 +114,8 @@ echo "=============================================="
 echo "• Запуск: «2. ЗАПУСТИТЬ Quartus.command» — Quartus откроется в браузере."
 echo "• Проекты храни в папке $PROJECTS_DIR (внутри Quartus она называется /projects)."
 echo "• Прошить плату: «3. ПРОШИТЬ плату.command»."
+[ "$WITH_QUESTA" = 1 ] && echo "• Для временных диаграмм один раз получи бесплатную лицензию:
+  «4. ЛИЦЕНЗИЯ для симуляции.command» (~10 минут)."
 echo "• Скачанные установщики лежат в $DL_DIR —"
 echo "  их можно удалить, если не планируешь переустанавливать."
 echo
