@@ -5,6 +5,8 @@
 Работает с модом **Simple Voice Chat**: немого никто не слышит, глухой не слышит никого.
 
 > Если нужна версия для сервера Paper (без мода у игроков), она лежит в папке [`paper-plugin/`](paper-plugin/README.md).
+>
+> Не про Minecraft: **Quartus Prime Lite на Mac** для цифровой электроники лежит в папке [`quartus-mac/`](quartus-mac/README.md).
 
 ## Что нужно поставить (каждому игроку)
 
